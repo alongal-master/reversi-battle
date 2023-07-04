@@ -35,14 +35,20 @@ class GridUI:
                                                                   (j+1)*self.box_size + self.label_space,
                                                                   (i+1)*self.box_size + self.label_space,
                                                                   fill=self.empty_color)
+        label_space = 50  # adjust this as needed
+        label_font = ("Helvetica", 10)  # choose your font and size
+        label_color = "#585858"  # choose your color
+
+
         # Add column labels
         for j in range(self.grid_size):
-            self.canvas.create_text((j+0.5)*self.box_size + self.label_space, self.label_space/2, text=f"Col {j}")
+            self.canvas.create_text((j+0.5)*self.box_size + label_space, label_space/2,
+                                    text=f"Col {j+1}", font=label_font, fill=label_color)
 
         # Add row labels
         for i in range(self.grid_size):
-            self.canvas.create_text(self.label_space/2, (i+0.5)*self.box_size + self.label_space, text=f"Row {i}")
-
+            self.canvas.create_text(label_space/2, (i+0.5)*self.box_size + label_space,
+                                    text=f"Row {i+1}", font=label_font, fill=label_color)
 
         # Frame for the Log box
         log_frame = tk.Frame(self._root)
@@ -92,7 +98,7 @@ class GridUI:
                         new_grid[i].append(self.names_to_colors[self.current_grid[i][j]])
         self.current_grid = new_grid
 
-    def animate_color_change_fade(self, box, final_color, duration=1000):
+    def animate_color_change_fade(self, box, final_color, duration=800):
         empty_color = self.canvas.itemcget(self.boxes[box], "fill")
         final_color = final_color if final_color else self.empty_color  # If color is None, revert to initial color
         initial_rgb = self._root.winfo_rgb(empty_color)
