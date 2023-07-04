@@ -36,15 +36,13 @@ class GridUI:
                                                                   (i+1)*self.box_size + self.label_space,
                                                                   fill=self.empty_color)
         label_space = 50  # adjust this as needed
-        label_font = ("Helvetica", 10)  # choose your font and size
-        label_color = "#585858"  # choose your color
-
+        label_font = ("Helvetica", 9)  # choose your font and size
+        label_color = "#757575"  # choose your color
 
         # Add column labels
         for j in range(self.grid_size):
-            self.canvas.create_text((j+0.5)*self.box_size + label_space, label_space/2,
+            self.canvas.create_text((j+0.5)*self.box_size + label_space, label_space/2 + 10,
                                     text=f"Col {j+1}", font=label_font, fill=label_color)
-
         # Add row labels
         for i in range(self.grid_size):
             self.canvas.create_text(label_space/2, (i+0.5)*self.box_size + label_space,
@@ -73,11 +71,14 @@ class GridUI:
         self.log.see(tk.END)  # Scroll the Text widget to show the new line
 
     def paint_index(self):
+
+        label_font = ("Helvetica", 12)  # choose your font and size
+        label_color = "#f0f0f0"  # choose your color
         label = Label(self._root, text="Teams:")
         label.pack()
         label.place(x=360, y=self.team_index_y-30)
         for name, color in self.names_to_colors.items():
-            label = Label(self._root, text=name, bg=color)
+            label = Label(self._root, text=name, bg=color, font=label_font, fg=label_color)
             label.pack()
             label.place(x=360, y=self.team_index_y)
             self.team_index_y += 30  # Increase y coordinate for next team

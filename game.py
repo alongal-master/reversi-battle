@@ -121,7 +121,7 @@ class ReversiGame():
                         self.check_direction(attacking_team_name, row, col, -1, -1)
             # Flip all the boxes to the attacking team
         if to_be_flipped:
-            self._interface.log_line(f"Wow! Team {attacking_team_name} has flipped {len(to_be_flipped)} boxes!")
+            self._interface.log_line(f"Wow! {attacking_team_name} has flipped {len(to_be_flipped)} boxes!")
             for row, col in to_be_flipped:
                 self._current_grid[row][col] = attacking_team_name
 
@@ -141,7 +141,7 @@ class ReversiGame():
 
         # Perform the attack.
         if attack_is_legal:
-            self._interface.log_line(f"Team {team.get_name()} played at row={target[0]} col={target[1]}")
+            self._interface.log_line(f"{team.get_name()} played at row={target[0]} col={target[1]}")
             row, col = target
             self._current_grid[row][col] = team.get_name()
             # Update GUI based on player move
@@ -186,7 +186,7 @@ class ReversiGame():
         attacker = self._game_order.pop()
         # Play move
         if not self.game_is_over(self._round):
-            self._interface.log_line(f"Starting turn {self._round}....")
+            #self._interface.log_line(f"Starting turn {self._round}....")
             self.perform_move(attacker)
             self._round += 1
         # Game is over!

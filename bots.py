@@ -47,30 +47,15 @@ class ReversiBotInterface(ABC):
         pass
 
 
-class RandomPicker(ReversiBotInterface):
-
-    def __init__(self, name="DaRandom", preferred_color="yellow"):
-        super().__init__(name, preferred_color)
-
-    def play_turn(self, grid):
-        """"
-        This bot will select a random box target, and try to conquer it.
-        """
-        n = len(grid)
-        row, col = random.randrange(n), random.randrange(n)
-        return row, col
-
-
-class SmartRandom(ReversiBotInterface):
-
+class RandomPlayer(ReversiBotInterface):
+    """"
+    This bot will select a random box target, and try to conquer it.
+    If it's occupied, it picks a different one.
+    """
     def __init__(self, name="SmartRandom", preferred_color="orange"):
         super().__init__(name, preferred_color)
 
     def play_turn(self, grid):
-        """"
-        This bot will select a random box target, and try to conquer it.
-        If it's occupied, it picks a different one.
-        """
         n = len(grid)
         row, col = random.randrange(n), random.randrange(n)
         while grid[row][col]:
@@ -79,7 +64,11 @@ class SmartRandom(ReversiBotInterface):
 
 
 class GreedyPlayer(ReversiBotInterface):
-
+    """"
+    Smart player that calculates the count of flipping
+    for each free box in the grid, and selects the max.
+    If all is zero, it selects a random box.
+    """
     def __init__(self, name="GreedyPlayer", preferred_color="brown"):
         super().__init__(name, preferred_color)
 
