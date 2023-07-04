@@ -23,7 +23,7 @@ class ReversiBotInterface(ABC):
         return self._preferred_color
 
     @abstractmethod
-    def play_turn(self, grid, list_of_alive_teams):
+    def play_turn(self, grid):
         """"
         This will be implemented in the child objects. This function gets 2 params:
         1. grid (List of lists) -
