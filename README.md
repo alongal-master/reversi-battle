@@ -2,8 +2,9 @@
 # Reversi Battle Game
 
 Welcome to our Reversi battle! 
-In this coding game, each team write it's own bot to play Reversi against other bots. Here are some quick rules of the game, 
-and a guide to help you implement your own player.
+In this coding game, each team writes it's own bot to play Reversi against other bots. 
+
+Here are some quick rules of the game, and a guide to help you implement your own player.
 
 ## Screenshot
 ![Screenshot](docs/Screenshot.png)
