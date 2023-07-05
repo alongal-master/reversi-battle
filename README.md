@@ -10,18 +10,35 @@ and a guide to help you implement your own player.
 
 ## Game Rules
 
-Reversi (also known as Othello) is a board game that involves strategy and tactics.
+Reversi (also known as Othello) is a board game that involves strategy and tactics.  The game is played on an 8x8 grid board.
+This game is a multiplayer version of Reversi, based on OOP Python.
 
-The game is played on an 8x8 uncheckered board. 
+Any number of teams can compete on a single board, where each team has its own color.
+The board starts empty, and then players take turns conquering boxes with their team's color. 
+In each turn, a team can choose any free box on the board.
 
-Players take turns conquering boxes with their team's color. You can choose any free box on the board.
+If a team conquers a box which is positioned in such a way that it outflanks other teams (in a straight line - horizontal, vertical, or diagonal) this team will "flip" all of the boxes in between to it's color.
+You can flip multiple opponent teams in one move.
 
-If you move to a box which is positioned in such a way that it creates a continuous straight line 
-(horizontal, vertical, or diagonal) with another box of your own color, 
-with one or more of your opponent's discs in between, you can "flip" them.
-
-When this is done, all boxes in between are turned to your color. 
 The game ends when the board is full. The team with the most boxes of their color wins the game.
+
+## This program
+
+This program plays out the game with a graphic interface.
+It supports any number of teams, where each team is created with a class definition.
+
+To compete in the game, you need to implement a class that play turns.
+
+## Requirements
+
+Python with the `tkinter` library pre-installed (should be built-in on most Python setups)
+. 
+
+This should work on Windows and macOS (although `tkinter` has some compatibility issues on  M1 computers).
+
+## Running the game
+
+To run the game, run `main.py`.
 
 ## Implementing a Player
 
