@@ -1,18 +1,15 @@
 import random
-import bots
 import grid
-import threading
-
 
 class ReversiGame():
 
     _board_size = 8
-    _initial_color = None
+    _empty_box_value = None
 
     def __init__(self):
         self._teams = {}  # Team (k) and instance (v)
         self._free_colors = ['red', 'green', 'blue', 'purple', 'yellow', 'orange', 'cyan', 'magenta']
-        self._current_grid = [[self._initial_color]*self._board_size for _ in range(self._board_size)]
+        self._current_grid = [[self._empty_box_value] * self._board_size for _ in range(self._board_size)]
 
     def start(self):
         """"
@@ -21,10 +18,9 @@ class ReversiGame():
         self._interface = grid.GridUI(self, self._current_grid, self._board_size, self._teams)
         # Run the long-running function in a separate thread
         # Create a randomized list of the teams for turn order for 200 rounds
-        random_ordered_teams = self._teams.values()
-        random.shuffle(list(random_ordered_teams))
-        self._game_order = list(random_ordered_teams)*200
-        self._interface.log_line("Started!!!!")
+        self._game_order = list(self._teams.values())
+        random.shuffle(self._game_order)
+        self._interface.log_line("Game Started!")
         # Battle until one team remains
         self._round = 1
         self._interface._root.mainloop()
@@ -109,8 +105,7 @@ class ReversiGame():
         there is a successful flip to be made.
         Then, flips all those boxes to the attacking team.
         """
-        # Checks four directions, and concat all boxes to be flipped to one list of tuples
-        # This doesn't check diagonals for now.
+        # Checks eight directions, and concat all boxes to be flipped to one list of tuples
         to_be_flipped = self.check_direction(attacking_team_name, row, col, 0, 1) + \
                         self.check_direction(attacking_team_name, row, col, 0, -1) + \
                         self.check_direction(attacking_team_name, row, col, 1, 0) + \
@@ -119,7 +114,7 @@ class ReversiGame():
                         self.check_direction(attacking_team_name, row, col, 1, -1) + \
                         self.check_direction(attacking_team_name, row, col, -1, 1) + \
                         self.check_direction(attacking_team_name, row, col, -1, -1)
-            # Flip all the boxes to the attacking team
+        # Flip all the boxes to the attacking team
         if to_be_flipped:
             self._interface.log_line(f"Wow! {attacking_team_name} has flipped {len(to_be_flipped)} boxes!")
             for row, col in to_be_flipped:
@@ -182,11 +177,10 @@ class ReversiGame():
         """"
         Plays the next team in the game order queue.
         """
-        # Start with next team in queue
-        attacker = self._game_order.pop()
+        # Determine who's turn is it based on the round number
+        attacker = self._game_order[(self._round - 1) % len(self._game_order)]
         # Play move
         if not self.game_is_over(self._round):
-            #self._interface.log_line(f"Starting turn {self._round}....")
             self.perform_move(attacker)
             self._round += 1
         # Game is over!

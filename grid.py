@@ -1,20 +1,23 @@
 import tkinter as tk
 from tkinter import Canvas, Button, Label
-
-EXTRA_HEIGHT = 200
+import tkinter.font as tkfont
+import faulthandler
+faulthandler.enable()
 
 
 class GridUI:
 
     box_size = 50
-    team_index_y = 540
+    team_index_y = 520
+    extra_height = 100
+    title = "Reversi Battle"
 
     def __init__(self, game_obj, initial_grid, grid_size, teams_dict, empty_color="white"):
         self._root = tk.Tk()
         self.empty_color = empty_color
         self.grid_size = grid_size
         self.boxes = {}
-        self.label_space = 50
+        self.label_space = 70
         self.current_grid = initial_grid
         self.game = game_obj
         self.teams = teams_dict
@@ -26,8 +29,15 @@ class GridUI:
 
     def setup_ui(self):
         self.canvas = Canvas(self._root, width=self.box_size * self.grid_size + 2 * self.label_space,
-                             height=self.box_size * self.grid_size + 2 * self.label_space + EXTRA_HEIGHT)
+                             height=self.box_size * self.grid_size + 2 * self.label_space + self.extra_height)
         self.canvas.pack()
+        self._root.title(self.title)
+
+        self.setup_grid()
+        self.setup_ui_controls()
+        self.setup_team_index()
+
+    def setup_grid(self):
         # Create the boxes with an offset
         for i in range(self.grid_size):
             for j in range(self.grid_size):
@@ -41,36 +51,32 @@ class GridUI:
 
         # Add column labels
         for j in range(self.grid_size):
-            self.canvas.create_text((j+0.5)*self.box_size + label_space, label_space/2 + 10,
-                                    text=f"Col {j+1}", font=label_font, fill=label_color)
+            self.canvas.create_text((j+0.5)*self.box_size + label_space + 20, label_space/2 + 27,
+                                    text=f"Col {j}", font=label_font, fill=label_color)
         # Add row labels
         for i in range(self.grid_size):
-            self.canvas.create_text(label_space/2, (i+0.5)*self.box_size + label_space,
-                                    text=f"Row {i+1}", font=label_font, fill=label_color)
+            self.canvas.create_text(label_space/2 + 15, (i+0.5)*self.box_size + label_space + 20,
+                                    text=f"Row {i}", font=label_font, fill=label_color)
 
+    def setup_ui_controls(self):
         # Frame for the Log box
         log_frame = tk.Frame(self._root)
         log_frame.pack(side=tk.BOTTOM)
 
-        button = Button(self._root, text="Next turn", command=self.next_turn, width=20, height=2)
-        button.pack()
-        button.place(x=10, y=520)  # Place the button at a specific position
+        # Create and style the button
+        font_style = tkfont.Font(family="Helvetica", size=16)
+
+        self.next_turn_button = tk.Button(self._root, text="Next Turn", font=font_style,
+                                          command=self.next_turn, padx=10, pady=10, relief=tk.GROOVE,
+                                          bg="#dcdcdc", bd=2)
+        self.next_turn_button.pack(anchor="nw")  # Anchor it to the northwest (top-left))
+        self.next_turn_button.place(x=70, y=self.team_index_y - 30)
 
         # Add a Text widget for the log box to the log_frame
-        self.log = tk.Text(log_frame, state='disabled', width=70, height=20)
+        self.log = tk.Text(log_frame, width=58, height=15)
         self.log.pack(fill=tk.BOTH, expand=True)  # use fill and expand to make the log box resizable
 
-        self.paint_index()
-
-
-    def log_line(self, line):
-        # Enable the widget, add the line, then disable it
-        self.log.config(state='normal')
-        self.log.insert(tk.END, str(line) + "\n")
-        self.log.config(state='disabled')
-        self.log.see(tk.END)  # Scroll the Text widget to show the new line
-
-    def paint_index(self):
+    def setup_team_index(self):
 
         label_font = ("Helvetica", 12)  # choose your font and size
         label_color = "#f0f0f0"  # choose your color
@@ -82,6 +88,13 @@ class GridUI:
             label.pack()
             label.place(x=360, y=self.team_index_y)
             self.team_index_y += 30  # Increase y coordinate for next team
+
+    def log_line(self, line):
+        # Enable the widget, add the line, then disable it
+        self.log.config(state='normal')
+        self.log.insert(tk.END, str(line) + "\n")
+        self.log.config(state='disabled')
+        self.log.see(tk.END)  # Scroll the Text widget to show the new line
 
     def next_turn(self):
         self.game.play_one_turn()
@@ -114,9 +127,7 @@ class GridUI:
             self.canvas.itemconfig(self.boxes[box], fill=color)
             if step < steps:
                 self._root.after(duration // steps, animate, step+1)
-
         animate(0)
-
 
     def update_grid(self, new_grid):
         previous_grid = self.current_grid
@@ -129,7 +140,6 @@ class GridUI:
                 if new_color != previous_grid[j][i]:
                     self.animate_color_change_fade((i, j), new_color)
         self.current_grid = new_grid
-
 
     def update_gui(self):
         self._root.update()
@@ -144,4 +154,3 @@ class GridUI:
             return False
         finally:
             root.destroy()
-
