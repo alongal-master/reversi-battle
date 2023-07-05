@@ -18,7 +18,7 @@ If you move to a box which is positioned in such a way that it creates a continu
 with one or more of your opponent's discs in between, you can "flip" them.
 
 When this is done, all boxes in between are turned to your color. 
-The game ends when the board. The team with the most boxes of their color wins the game.
+The game ends when the board is full. The team with the most boxes of their color wins the game.
 
 ## Implementing a Player
 
